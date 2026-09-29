@@ -71,6 +71,21 @@ try {
   }
   // 고정(sticky)되는 페이지는 자체 위치가 스크롤에 따라 바뀌므로, 제자리에 둔 투명 표식으로 스냅한다.
   document.querySelectorAll('.stack-group').forEach(group => [...group.children].forEach((page, k) => { if (page.classList.contains('stacked')) group.append(Object.assign(document.createElement('i'), {className: 'snap-mark', style: `top:${k * 100}dvh`})); }));
+  // 내용이 화면 높이보다 길면 스크롤 대신 통째로 줄여 한 화면에 담는다(작은 노트북 화면 등). 넓이는 가운데 기준으로 함께 줄어든다.
+  // scale 속성은 자리(레이아웃)를 줄이지 않으므로, 줄어든 만큼 아래 여백을 당겨 가운데 정렬이 맞게 한다. 사진이 늦게 불러와져 높이가 바뀌면 다시 맞춘다.
+  const fitRegion = region => {
+    const kids = [...region.children]; if (!kids.length || region.querySelector('.tablet')) return;
+    const apply = f => kids.forEach(k => { k.style.transformOrigin = 'top center'; k.style.scale = f === 1 ? '' : f; k.style.marginBottom = f === 1 ? '' : `${-(1 - f) * k.offsetHeight}px`; });
+    apply(1);
+    const cs = getComputedStyle(region), pad = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+    let f = 1;
+    for (let pass = 0; pass < 4 && region.scrollHeight - region.clientHeight > 1 && f > .55; pass++) { // 간격·여백은 줄지 않아 한 번에 안 맞을 수 있어 몇 번 더 좁힌다
+      f = Math.max(.55, f * (region.clientHeight - pad) / (region.scrollHeight - pad) - .005); apply(f);
+    }
+  };
+  const fitObserver = new ResizeObserver(entries => new Set(entries.map(e => e.target.closest('.content-region'))).forEach(r => r && fitRegion(r)));
+  document.querySelectorAll('.content-region').forEach(region => { fitObserver.observe(region); [...region.children].forEach(k => fitObserver.observe(k)); });
+  document.fonts?.ready.then(() => document.querySelectorAll('.content-region').forEach(fitRegion));
   const pages = [...document.querySelectorAll('.page')]; let current = 0;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const menu = document.querySelector('.menu'), stepsEl = document.querySelector('.steps-fixed');
