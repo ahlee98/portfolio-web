@@ -1,10 +1,10 @@
-import { renderCover } from './cover.js?v=73322c77';
-import { mockups, mountProto } from './proto.js?v=73322c77';
-import { photos, mountPhotos } from './photos.js?v=73322c77';
-import { reframe, mountReframe } from './reframe.js?v=73322c77';
-import { tablet, mountTabletPage } from './tablet.js?v=73322c77';
-import { renderProfile } from './profile.js?v=73322c77';
-import { voices, mountVoices } from './voices.js?v=73322c77';
+import { renderCover } from './cover.js?v=71c0f549';
+import { mockups, mountProto } from './proto.js?v=71c0f549';
+import { photos, mountPhotos } from './photos.js?v=71c0f549';
+import { reframe, mountReframe } from './reframe.js?v=71c0f549';
+import { tablet, mountTabletPage } from './tablet.js?v=71c0f549';
+import { renderProfile } from './profile.js?v=71c0f549';
+import { voices, mountVoices } from './voices.js?v=71c0f549';
 const main = document.querySelector('#pages');
 const escape = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const steps = ['Overview', 'Problem', 'Direction', 'Solution 01', 'Solution 02', 'Learning'];
@@ -97,14 +97,17 @@ try {
   const sameStage = (a, b) => [a, b].every(i => pages[i].classList.contains('project-page')) && pages[a].dataset.project === pages[b].dataset.project;
   // 페이지 이동 스크롤은 직접 애니메이션한다. 사파리는 scroll-snap이 걸린 영역에서 scrollTo({behavior: 'smooth'})가 제자리로 되돌아가
   // 페이지 상태만 바뀌고 화면은 안 움직이는(두 장이 겹쳐 보이는) 문제가 있어, 브라우저 기본 부드러운 스크롤을 쓰지 않는다.
-  let scrollAnim = 0;
+  let scrollAnim = 0, scrollGoal = 0, holdUntil = 0, animating = false;
+  // 사파리는 트랙패드 관성이 이어지는 동안 코드로 바꾼 스크롤 위치를 무시하기도 해, 애니메이션이 끝난 뒤에도 잠시 목표 위치를 지키며 어긋나면 되돌린다.
+  const hold = () => { if (Math.abs(main.scrollTop - scrollGoal) > 1) main.scrollTop = scrollGoal; if (performance.now() < holdUntil) scrollAnim = requestAnimationFrame(hold); };
   const scrollMain = (top, instant) => {
-    cancelAnimationFrame(scrollAnim);
+    cancelAnimationFrame(scrollAnim); scrollGoal = top; animating = false;
     const from = main.scrollTop, dist = top - from;
-    if (instant || Math.abs(dist) < 1) { main.scrollTop = top; return; }
+    if (instant || Math.abs(dist) < 1) { main.scrollTop = top; holdUntil = performance.now() + 1500; scrollAnim = requestAnimationFrame(hold); return; }
     const dur = Math.min(900, 480 + Math.abs(dist) / main.clientHeight * 120), start = performance.now();
     const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-    const step = now => { const t = Math.min(1, (now - start) / dur); main.scrollTop = from + dist * ease(t); if (t < 1) scrollAnim = requestAnimationFrame(step); };
+    animating = true;
+    const step = now => { const t = Math.min(1, (now - start) / dur); main.scrollTop = from + dist * ease(t); if (t < 1) scrollAnim = requestAnimationFrame(step); else { animating = false; holdUntil = now + 1500; scrollAnim = requestAnimationFrame(hold); } };
     scrollAnim = requestAnimationFrame(step);
   };
   const go = index => {
@@ -143,6 +146,8 @@ try {
     if (nearest !== current || !pages[nearest].classList.contains('is-active')) update(nearest);
   }
   let ticking = false;
+  // 사용자가 직접 스크롤할 수 없는 영역인데도 사파리가 트랙패드 입력으로 움직이는 경우가 있어, 애니메이션 중이 아니면 목표 위치로 되돌린다.
+  main.addEventListener('scroll', () => { if (!animating && Math.abs(main.scrollTop - scrollGoal) > 1) main.scrollTop = scrollGoal; }, {passive: true});
   main.addEventListener('scroll', () => { if (!ticking) requestAnimationFrame(() => { render(); ticking = false; }); ticking = true; }, {passive:true});
   // 창 크기가 바뀌면 페이지 높이가 달라지므로, 보던 페이지 위치로 다시 맞춘다(다른 페이지로 튀지 않게).
   addEventListener('resize', () => { target = current; scrollMain(current * main.clientHeight, true); render(); });

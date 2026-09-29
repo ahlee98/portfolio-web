@@ -3,7 +3,7 @@
 // 첫 카드의 '허용'(' / '로 구분)은 이 페이지에서 갈 수 있는 화면만 남기고 나머지(다른 장에서 보여 줄 화면)는 막는다. '막힘 안내'는 그때 띄울 문구, '숨김 메뉴'는 GNB에서 숨길 메뉴(이동할 화면 이름).
 // 포트폴리오 안에서는 GNB의 Sign in·My page도 막는다.
 // 프로토타입(이미지·영상 약 6MB)은 페이지 근처에 오면 불러오고, 들어올 때마다 첫 탭 화면부터 보여 준다.
-import { mountTablet } from './oiooi-proto.js?v=73322c77';
+import { mountTablet } from './oiooi-proto.js?v=71c0f549';
 const escape = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // 프로토타입 화면 → 선택할 탭 화면. 온보딩부터 추천까지는 '맞춤활동 추천' 탭에 속한다.
 const GROUP = {loading: 'onboard', recommend: 'onboard'};
