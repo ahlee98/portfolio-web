@@ -1,10 +1,10 @@
-import { renderCover } from './cover.js?v=53586a79';
-import { mockups, mountProto } from './proto.js?v=53586a79';
-import { photos, mountPhotos } from './photos.js?v=53586a79';
-import { reframe, mountReframe } from './reframe.js?v=53586a79';
-import { tablet, mountTabletPage } from './tablet.js?v=53586a79';
-import { renderProfile } from './profile.js?v=53586a79';
-import { voices, mountVoices } from './voices.js?v=53586a79';
+import { renderCover } from './cover.js?v=335a5739';
+import { mockups, mountProto } from './proto.js?v=335a5739';
+import { photos, mountPhotos } from './photos.js?v=335a5739';
+import { reframe, mountReframe } from './reframe.js?v=335a5739';
+import { tablet, mountTabletPage } from './tablet.js?v=335a5739';
+import { renderProfile } from './profile.js?v=335a5739';
+import { voices, mountVoices } from './voices.js?v=335a5739';
 const main = document.querySelector('#pages');
 const escape = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const steps = ['Overview', 'Problem', 'Direction', 'Solution 01', 'Solution 02', 'Learning'];

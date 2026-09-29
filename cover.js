@@ -1,6 +1,6 @@
 // 프로젝트 표지(각 프로젝트 1장): cover.html 틀에 content.json의 cover 값을 채운다.
-import { mountPhone } from './phone.js?v=53586a79';
-import { mountWeb } from './web-screen.js?v=53586a79';
+import { mountPhone } from './phone.js?v=335a5739';
+import { mountWeb } from './web-screen.js?v=335a5739';
 const template = document.createElement('template');
 try {
   const response = await fetch('./cover.html'); if (!response.ok) throw new Error('Cover unavailable');
