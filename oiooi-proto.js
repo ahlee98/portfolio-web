@@ -2,7 +2,7 @@
 // 메인 → 브랜드 소개(About us) → 온보딩 5단계 → 로딩 → 맞춤 추천 → 활동 리스트 → 활동 세부 순서로 이어진다.
 // 1366×1024 캔버스를 컨테이너 너비에 맞춰 축소하고, tour가 있으면 가상 커서가 흐름을 시연한다.
 // 사용자가 태블릿을 누르거나 올려 두면 시연을 멈추고, 손을 떼고 잠시 지나면 처음부터 다시 시연한다.
-import { ICON } from './oiooi-proto-icons.js?v=71c0f549';
+import { ICON } from './oiooi-proto-icons.js?v=53586a79';
 
 const IMG = new URL('./assets/oiooi-proto/', import.meta.url).href;
 const W = 1366, H = 1024;

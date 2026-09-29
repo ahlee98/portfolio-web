@@ -1,10 +1,10 @@
-import { renderCover } from './cover.js?v=71c0f549';
-import { mockups, mountProto } from './proto.js?v=71c0f549';
-import { photos, mountPhotos } from './photos.js?v=71c0f549';
-import { reframe, mountReframe } from './reframe.js?v=71c0f549';
-import { tablet, mountTabletPage } from './tablet.js?v=71c0f549';
-import { renderProfile } from './profile.js?v=71c0f549';
-import { voices, mountVoices } from './voices.js?v=71c0f549';
+import { renderCover } from './cover.js?v=53586a79';
+import { mockups, mountProto } from './proto.js?v=53586a79';
+import { photos, mountPhotos } from './photos.js?v=53586a79';
+import { reframe, mountReframe } from './reframe.js?v=53586a79';
+import { tablet, mountTabletPage } from './tablet.js?v=53586a79';
+import { renderProfile } from './profile.js?v=53586a79';
+import { voices, mountVoices } from './voices.js?v=53586a79';
 const main = document.querySelector('#pages');
 const escape = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const steps = ['Overview', 'Problem', 'Direction', 'Solution 01', 'Solution 02', 'Learning'];
@@ -169,9 +169,12 @@ try {
     const dy = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? main.clientHeight : 1); // 줄·페이지 단위 휠 보정
     if (!dy) return;
     const flipped = Math.abs(dy) >= 4 && Math.sign(dy) !== Math.sign(lastDelta || dy); // 관성 끝의 미세한 역방향 값은 무시
-    if (now - lastWheel > 160 || flipped) { gestureUsed = false; wheelSum = 0; }
+    // 사파리 트랙패드는 관성 끝자락(값 1~2)이 0.1~0.3초씩 끊겨 들어온다. 이런 작은 값은 쉬었다 와도 새 제스처로 보지 않는다.
+    const tail = Math.abs(dy) < 3 && now - lastWheel < 400;
+    if ((now - lastWheel > 160 && !tail) || flipped) { gestureUsed = false; wheelSum = 0; }
     lastWheel = now; if (Math.abs(dy) >= 4) lastDelta = dy;
-    if (gestureUsed || now - lockedAt < 300 || now - innerAt < 500) return; // 같은 제스처의 관성 입력·안쪽 스크롤 직후 입력은 무시
+    // 같은 제스처의 관성 입력·안쪽 스크롤 직후 입력은 무시. 한 장 넘긴 뒤 0.7초는 쉬어, 연달아 쓸어도(내용만 바뀌는 2~6장에서 특히) 여러 장이 한꺼번에 지나가지 않게 한다.
+    if (gestureUsed || now - lockedAt < 700 || now - innerAt < 500) return;
     wheelSum += dy;
     if (Math.abs(wheelSum) < 12) return;
     go(current + Math.sign(wheelSum)); gestureUsed = true; lockedAt = now;
