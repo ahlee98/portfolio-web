@@ -151,7 +151,9 @@ export function mountTablet(host, {tour = null, start = 'main', caption = true, 
   const cursor = host.querySelector('.tp-cursor'), toastEl = host.querySelector('.tp-toast'), capText = host.querySelector('.tp-caption-text');
   let screen = '', scale = 1;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  new ResizeObserver(() => { scale = glass.clientWidth / W; canvas.style.transform = `scale(${scale})`; glass.style.height = `${H * scale}px`; }).observe(glass);
+  // 높이는 비율(aspect-ratio)로 정해 두고, 폭이 바뀔 때 캔버스 배율만 바꾼다(관찰 대상의 높이를 직접 바꾸면 사파리 등에서 ResizeObserver 반복 오류가 난다).
+  glass.style.aspectRatio = `${W} / ${H}`;
+  new ResizeObserver(() => { scale = glass.clientWidth / W; canvas.style.transform = `scale(${scale})`; }).observe(glass);
 
   const levelAreas = () => { const s = ['언어', '신체'].filter(a => st.areas.has(a)); return s.length ? s : ['언어', '신체']; };
   const chips = () => {

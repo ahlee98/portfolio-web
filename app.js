@@ -83,7 +83,9 @@ try {
       f = Math.max(.55, f * (region.clientHeight - pad) / (region.scrollHeight - pad) - .005); apply(f);
     }
   };
-  const fitObserver = new ResizeObserver(entries => new Set(entries.map(e => e.target.closest('.content-region'))).forEach(r => r && fitRegion(r)));
+  // 관찰 콜백 안에서 바로 크기를 바꾸지 않고 다음 프레임에 몰아서 맞춘다(ResizeObserver 반복 오류 방지).
+  const fitPending = new Set(); let fitFrame = 0;
+  const fitObserver = new ResizeObserver(entries => { entries.forEach(e => { const r = e.target.closest('.content-region'); if (r) fitPending.add(r); }); if (!fitFrame) fitFrame = requestAnimationFrame(() => { fitFrame = 0; fitPending.forEach(fitRegion); fitPending.clear(); }); });
   document.querySelectorAll('.content-region').forEach(region => { fitObserver.observe(region); [...region.children].forEach(k => fitObserver.observe(k)); });
   document.fonts?.ready.then(() => document.querySelectorAll('.content-region').forEach(fitRegion));
   const pages = [...document.querySelectorAll('.page')]; let current = 0;

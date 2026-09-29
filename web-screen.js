@@ -13,7 +13,8 @@ export function mountWeb(figure, page) {
   </div></div></div>`;
   figure.setAttribute('aria-label', '이응이 웹 메인 화면');
   const glass = figure.querySelector('.web-glass'), canvas = figure.querySelector('.web-canvas'), video = figure.querySelector('video');
-  new ResizeObserver(() => { const k = glass.clientWidth / W; canvas.style.transform = `scale(${k})`; glass.style.height = `${H * k}px`; }).observe(glass);
+  glass.style.aspectRatio = `${W} / ${H}`; // 높이는 비율로, 배율만 관찰해서 바꾼다(ResizeObserver 반복 오류 방지)
+  new ResizeObserver(() => { const k = glass.clientWidth / W; canvas.style.transform = `scale(${k})`; }).observe(glass);
   let loaded = false;
   const load = () => { if (!loaded) { loaded = true; video.src = `${DIR}hero.mp4`; } };
   addEventListener('portfolio:page', e => { const pages = [...document.querySelectorAll('.page')]; if (Math.abs(e.detail.index - pages.indexOf(page)) <= 1) load(); });
