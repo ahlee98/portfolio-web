@@ -1,0 +1,18 @@
+/* 최상단 -hello. 페이지: ahlee98.github.io/ah_portfolio 히어로와 동일 */
+.hello-page{--hello-bg:#f7f7f5;position:sticky;top:0;z-index:0;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--hello-bg);color:#111;cursor:none}
+.hello-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:calc(1 - var(--covered,0) * .75)}
+.site-name{position:absolute;top:40px;left:4.2vw;font-size:12px;font-weight:500;letter-spacing:.01em}
+.hello-projects-btn{position:absolute;top:34px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(0,0,0,.2);padding:7px 20px;border-radius:100px;white-space:nowrap;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.hello-projects-btn:hover{background:#111;color:var(--hello-bg);border-color:#111}
+#hello-wrap{width:88vw;max-width:1100px;height:260px;overflow:hidden;display:flex;align-items:center;justify-content:center;will-change:transform}
+#hello-canvas{display:block;width:100%;flex-shrink:0;height:auto}
+.scroll-hint{position:absolute;bottom:44px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#888}
+.scroll-hint::after{content:"";width:1px;height:36px;background:#888;transform-origin:center top;animation:scrollLine 2s ease-in-out infinite}
+@keyframes scrollLine{0%{opacity:0;transform:scaleY(0)}40%{opacity:1;transform:scaleY(1)}100%{opacity:0;transform:scaleY(1)}}
+#cursor{position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);opacity:0;transition:opacity .3s}
+#cursor.visible{opacity:1}
+.cursor-text{white-space:nowrap;font-size:11px;font-weight:600;letter-spacing:.08em;color:#111;background:#f7f7f5;border:1px solid rgba(0,0,0,.12);padding:6px 12px;border-radius:100px}
+.cursor-emoji{font-size:32px;line-height:1;display:none}
+#cursor.on-hello .cursor-text{display:none}
+#cursor.on-hello .cursor-emoji{display:block}
+.emoji-burst{position:fixed;pointer-events:none;z-index:9998;font-size:38px;line-height:1;transform-origin:center;will-change:transform,opacity;user-select:none}

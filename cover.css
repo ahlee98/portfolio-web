@@ -1,0 +1,68 @@
+/* 프로젝트 표지: 어두운 배경, 좌 제목 · 중앙 휴대폰 · 우 프로젝트 정보. --frame: 가운데 기기(휴대폰·태블릿) 흰 테두리 두께 공통값 */
+.cover-page{--frame:7px;position:sticky;top:0;z-index:0;overflow:hidden;background:var(--dark);color:#fff}
+.cover-inner{height:100%;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:4vw;padding:120px 4.2vw 80px;opacity:calc(1 - var(--covered,0) * .75)} /* 덮일 때 어두워지기만 함(크기 변화는 휴대폰 SVG를 매 프레임 다시 그려 버벅임) */
+.cover-project{font-size:clamp(16px,1.05vw,20px);font-weight:500;color:#8b8c91;margin:0 0 20px;word-break:keep-all}
+.cover-title{font-size:clamp(32px,2.7vw,52px);font-weight:700;line-height:1.3;letter-spacing:-1.5px;color:#fff;max-width:8.4em;word-break:keep-all}
+.cover-phone{margin:0;height:min(65dvh,700px);aspect-ratio:33/70}
+.cover-phone img{width:100%;height:100%;object-fit:contain;display:block}
+.cover-phone.cover-web{height:auto;width:min(34.6vw,calc(62dvh * 4 / 3),720px);aspect-ratio:auto} /* 1920 시안 기준 폭 665px */
+/* 태블릿 웹 화면 (web-screen.js): 프로토타입 첫 화면. 1366×1024 캔버스를 틀 폭에 맞춰 축소 */
+.web-device{width:100%;box-sizing:border-box;padding:var(--frame);border-radius:calc(clamp(10px,.94vw,18px) + var(--frame));background:#fff;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.web-glass{position:relative;width:100%;overflow:hidden;border-radius:clamp(10px,.94vw,18px);background:#8a7362;aspect-ratio:1366/1024}
+.web-canvas{position:absolute;left:0;top:0;width:1366px;height:1024px;transform-origin:0 0;overflow:hidden;color:#fff;text-align:center;font-family:NanumSquare,Pretendard,sans-serif;letter-spacing:-.3px}
+.web-canvas .bg{position:absolute;left:-229px;top:-1px;width:1824px;height:1026px;object-fit:cover}
+.web-canvas .shade{position:absolute;inset:0;background:rgba(99,79,66,.4)}
+.web-canvas .logo{position:absolute;left:537px;top:35px;width:292px;height:61px;object-fit:contain}
+.web-canvas .sign{position:absolute;right:69px;top:35px;display:grid;place-items:center;width:188px;height:44px;border-radius:40px;background:#634f42;font:700 14px 'Nanum Gothic',Pretendard,sans-serif}
+.web-canvas h4{position:absolute;left:0;right:0;top:424px;margin:0;font:500 70px/93px Jost,Futura,sans-serif;letter-spacing:1px;text-shadow:0 4px 4px rgba(0,0,0,.25)}
+.web-canvas p{position:absolute;left:0;right:0;top:525px;margin:0;font-size:22px;font-weight:700;line-height:31px;text-shadow:0 4px 4px rgba(0,0,0,.25)}
+.web-canvas .btns{position:absolute;left:0;right:0;top:596px;display:flex;justify-content:center;gap:24px}
+.web-canvas .btns span{display:grid;place-items:center;width:168px;height:44px;border:1px solid #fff;border-radius:40px;background:rgba(255,255,255,.2);font:400 20px Poppins,sans-serif}
+.web-canvas .scroll{position:absolute;left:612px;top:887px;width:142px;height:142px}
+.web-canvas .scroll img{position:absolute;inset:0;width:100%;height:100%}
+.web-canvas .scroll span{position:absolute;left:0;right:0;top:84px;font:400 15px Poppins,sans-serif}
+.cover-info{justify-self:end;width:min(360px,100%)}
+.cover-block+.cover-block{margin-top:44px}
+.cover-block h3{font-size:clamp(17px,1.05vw,20px);font-weight:600;margin:0 0 10px}
+.cover-block p,.cover-block li{font-size:14px;color:#8b8c91;margin:0;line-height:1.6}
+.cover-text .cover-label{margin-bottom:12px}
+.cover-text p:not(.cover-label),.cover-text li{font-size:15px;line-height:1.95;color:#dcdcdf;word-break:keep-all}
+.cover-text ul{list-style:none;margin:0;padding:0}
+@media(max-height:750px) and (min-width:960px){.cover-inner{padding:90px 4.2vw 60px}.cover-block+.cover-block{margin-top:26px}.cover-text p:not(.cover-label),.cover-text li{line-height:1.75}}
+/* 움직이는 휴대폰 (phone.js): 임시 CSS 테두리. 휴대폰 틀 이미지를 받으면 교체 */
+.cover-phone.is-live{position:relative;aspect-ratio:auto;height:auto;width:calc(min(65dvh,700px) * 375 / 812 + var(--frame) * 2);padding:var(--frame);border-radius:calc(42px + var(--frame));background:#fff;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.phone-screen{position:relative;width:100%;aspect-ratio:375/812;overflow:hidden;border-radius:42px;background:#F5F7F9}
+.phone-layer{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility 0s .35s}
+.phone-layer.on{opacity:1;visibility:visible;z-index:1;transition:opacity .35s ease}
+.phone-layer foreignObject{display:none} /* Figma 배경 흐림: 비용이 커서 끔 */
+.phone-layer svg,.phone-tabbar{display:block;width:100%;height:100%}
+.phone-layer .baked-tabbar{display:none}
+.phone-tabbar{position:absolute;inset:0;z-index:2;pointer-events:none}
+.phone-tabbar>path:first-child{filter:drop-shadow(0 6px 14px rgba(23,29,35,.1))}
+.tab-pill{transition:transform .5s cubic-bezier(.3,1.3,.5,1)}
+/* SVG에 박힌 fill-opacity(아이콘 .2 · 라벨 .4)를 풀고, 선택된 탭은 '마이'처럼 진하게 */
+.tab-item path{fill:#171D23;fill-opacity:1;transition:opacity .3s}
+.tab-item path:first-child{opacity:.2}.tab-item path:last-child{opacity:.4}
+.tab-item.on path{opacity:1}
+.phone-tabs{position:absolute;left:4.267%;width:91.47%;top:89.16%;height:9.85%;display:flex;z-index:3}
+.phone-tabs button{flex:1;border:0;background:none;color:transparent;font-size:0;cursor:pointer;border-radius:40px}
+.phone-tabs button:focus-visible{outline:2px solid #fff;outline-offset:-4px}
+/* 모듈 모션: 화면이 켜질 때(.play) 한 번 재생 */
+.m{transform-box:fill-box;transform-origin:center}
+.play .m{animation:.75s cubic-bezier(.2,.8,.2,1) var(--d,0ms) both}
+.play .m-rise{animation-name:m-rise}.play .m-pop{animation-name:m-pop;animation-timing-function:cubic-bezier(.3,1.4,.5,1)}
+.play .m-drop{animation-name:m-drop;animation-timing-function:cubic-bezier(.3,1.35,.5,1)}
+.play .m-wheel{animation-name:m-wheel;animation-duration:1.05s;animation-timing-function:cubic-bezier(.3,1.12,.4,1)}.play .m-slide-l{animation-name:m-slide-l}.play .m-slide-r{animation-name:m-slide-r}
+.play .m-reveal{animation-name:m-reveal;animation-duration:1.3s;animation-timing-function:cubic-bezier(.45,0,.25,1)}.play .m-sheet{animation-name:m-sheet}.play .m-fade{animation-name:m-fade}
+@keyframes m-rise{from{opacity:0;transform:translateY(14px)}}
+@keyframes m-pop{from{opacity:0;transform:scale(.55)}}
+@keyframes m-drop{from{opacity:0;transform:translateY(-36px) rotate(-14deg) scale(.75)}}
+@keyframes m-slide-l{from{opacity:0;transform:translateX(-50px)}}
+@keyframes m-slide-r{from{opacity:0;transform:translateX(50px)}}
+/* wheel: 가운데 카드 아래(188, 1046)를 축으로 한 칸(약 22°)만큼 돌아 들어옴 */
+.m-wheel{transform-box:view-box;transform-origin:188px 1046px}
+@keyframes m-wheel{from{transform:rotate(22deg)}}
+@keyframes m-reveal{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes m-sheet{from{transform:translateY(40px)}}
+@keyframes m-fade{from{opacity:0}}
+.cover-key{align-self:start;margin-top:calc(var(--key-top) - 120px)}@media(max-height:750px) and (min-width:960px){.cover-key{margin-top:calc(var(--key-top) - 90px)}}

@@ -1,0 +1,137 @@
+{
+  "role": "Product Designer",
+  "name": "Ahhyun Lee",
+  "email": "ahyun98@naver.com",
+  "phone": "010 5176 6386",
+  "sections": [
+    {
+      "title": "Experience",
+      "items": [
+        {
+          "period": "2025. 04 — 현재",
+          "title": "바이널씨",
+          "text": "UX 컨설턴트",
+          "details": []
+        },
+        {
+          "period": "2024. 05 — 2025. 12",
+          "title": "홍익대학교 서비스디자인경험연구소",
+          "text": "선임연구원",
+          "details": []
+        },
+        {
+          "period": "2022. 03 — 2024. 02",
+          "title": "홍익대학교 IDAS",
+          "text": "디지털미디어디자인 석사",
+          "details": []
+        }
+      ]
+    },
+    {
+      "title": "Project Experience",
+      "items": [
+        {
+          "period": "2026. 03 — 2026. 06",
+          "title": "하나은행 아이부자",
+          "text": "아이부자 UX 컨설팅",
+          "details": []
+        },
+        {
+          "period": "2026. 01 — 2026. 03",
+          "title": "KB국민은행",
+          "text": "퇴직연금 비대면 채널 혁신 추진 컨설팅",
+          "details": []
+        },
+        {
+          "period": "2025. 05 — 2025. 12",
+          "title": "KB국민은행",
+          "text": "컨설팅 운영 프로젝트",
+          "details": [
+            "중고차 서비스 KB차차차 앱 개선안 검증 (UT 6명)",
+            "송금/이체 UX라이팅 인식 조사 (온라인 설문 700명)",
+            "KB스타뱅킹 전체메뉴 개선안 검증 조사 (온라인 설문 / FCT 300명)",
+            "개인사업자 세무 관련 심층인터뷰 (8명)",
+            "경리 대상 ERP프로그램 이용 경험 조사 (심층인터뷰 6명)",
+            "BaaS형 금융솔루션 심층인터뷰 (8명)"
+          ]
+        },
+        {
+          "period": "2025. 04",
+          "title": "현대자동차",
+          "text": "Entry/Exit 사용자 리서치 제안 리딩",
+          "details": []
+        },
+        {
+          "period": "2024. 08 — 2024. 10",
+          "title": "여수세계박람회장",
+          "text": "안내·안전 사인 체계 개선 사업",
+          "details": []
+        },
+        {
+          "period": "2024. 06 — 2024. 12",
+          "title": "디자인진흥원",
+          "text": "지속가능디자인지원사업 서비스 디자인 컨설팅",
+          "details": []
+        },
+        {
+          "period": "2024. 05 — 2025. 07",
+          "title": "한국연구재단",
+          "text": "신진연구자지원사업 Z세대 버추얼 휴먼 연구",
+          "details": []
+        },
+        {
+          "period": "2024. 01 — 2024. 07",
+          "title": "국립순천대학교",
+          "text": "캠퍼스 안전인프라 제작설치 사업",
+          "details": []
+        },
+        {
+          "period": "2023. 08 — 2023. 09",
+          "title": "덧셈",
+          "text": "세금 환급 서비스 MVP 서비스 출시",
+          "details": []
+        }
+      ]
+    },
+    {
+      "title": "Publications",
+      "items": [
+        {
+          "period": "2025. 08",
+          "title": "피지털 경험 요인에 따른 디지털 휴먼 페르소나 설계 전략: 가상성과 상호작용성을 중심으로",
+          "text": "단독 1저자 · 한국디자인학회 (ADR)",
+          "badge": "SCOPUS",
+          "details": []
+        },
+        {
+          "period": "2024. 08",
+          "title": "멀티모달 청사진 기반 DX 박물관 전략 연구: Z세대를 중심으로",
+          "text": "제 1저자 · 한국디자인학회 (ADR)",
+          "badge": "SCOPUS",
+          "details": []
+        },
+        {
+          "period": "2023. 08",
+          "title": "Z세대 금융 마이데이터 인식 제고를 위한 사용자 경험 연구",
+          "text": "제 1저자 · 차세대컨버전스정보기술논문지 (JNCIST)",
+          "badge": "KCI",
+          "details": []
+        },
+        {
+          "period": "2022. 12",
+          "title": "A Study on the User Experience to Improve Immersion as a Digital Human in Lifestyle Content",
+          "text": "제 5저자 · MDPI",
+          "badge": "SCI",
+          "details": []
+        },
+        {
+          "period": "2022. 12",
+          "title": "웹툰 기반 UI애니메이션에 따른 사용자 경험 연구: 네이버 웹툰과 카카오 웹툰을 중심으로",
+          "text": "제 1저자 · 차세대컨버전스정보기술논문지 (JNCIST)",
+          "badge": "KCI",
+          "details": []
+        }
+      ]
+    }
+  ]
+}
