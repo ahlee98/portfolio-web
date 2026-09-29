@@ -41,7 +41,7 @@ function cards(list) {
 }
 const stepLinks = (project, active) => project.pages.map((page,i) => `<a href="#${page.id}" aria-label="${project.name} ${i+1}장 ${steps[i]}"${i === active ? ' aria-current="step"' : ''}><i></i></a>`).join('');
 try {
-  const response = await fetch('./content.json'); if (!response.ok) throw new Error('Content unavailable');
+  const response = await fetch('./content.json', {cache: 'no-cache'}); if (!response.ok) throw new Error('Content unavailable');
   const projects = await response.json();
   for (const project of projects) {
     // 표지는 프로젝트 그룹 안에서 고정(sticky)되고, 밝은 설명 페이지가 그 위를 덮으며 올라온다.
@@ -61,7 +61,7 @@ try {
     main.append(group);
   }
   // 마지막 장: Profile(profile.json). 불러오지 못하면 프로젝트만 보여 준다.
-  const profile = await fetch('./profile.json').then(r => r.ok ? r.json() : null).catch(() => null);
+  const profile = await fetch('./profile.json', {cache: 'no-cache'}).then(r => r.ok ? r.json() : null).catch(() => null);
   if (profile) {
     // 프로젝트 표지처럼 어두운 면으로, 자기 그룹 안에서 고정(sticky)된 채 앞 페이지를 덮으며 올라온다.
     const group = Object.assign(document.createElement('div'), {className: 'stack-group'});
