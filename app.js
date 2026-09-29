@@ -95,11 +95,23 @@ try {
   let target = null, targetTimer;
   // 같은 프로젝트의 설명 페이지끼리는 내용이 화면에 고정돼 있어 위치만 즉시 옮기고(스크롤 없음) 내용 교체만 보여준다.
   const sameStage = (a, b) => [a, b].every(i => pages[i].classList.contains('project-page')) && pages[a].dataset.project === pages[b].dataset.project;
+  // 페이지 이동 스크롤은 직접 애니메이션한다. 사파리는 scroll-snap이 걸린 영역에서 scrollTo({behavior: 'smooth'})가 제자리로 되돌아가
+  // 페이지 상태만 바뀌고 화면은 안 움직이는(두 장이 겹쳐 보이는) 문제가 있어, 브라우저 기본 부드러운 스크롤을 쓰지 않는다.
+  let scrollAnim = 0;
+  const scrollMain = (top, instant) => {
+    cancelAnimationFrame(scrollAnim);
+    const from = main.scrollTop, dist = top - from;
+    if (instant || Math.abs(dist) < 1) { main.scrollTop = top; return; }
+    const dur = Math.min(900, 480 + Math.abs(dist) / main.clientHeight * 120), start = performance.now();
+    const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const step = now => { const t = Math.min(1, (now - start) / dur); main.scrollTop = from + dist * ease(t); if (t < 1) scrollAnim = requestAnimationFrame(step); };
+    scrollAnim = requestAnimationFrame(step);
+  };
   const go = index => {
     if (index < 0 || index >= pages.length || index === current) return;
     const instant = reduced.matches || sameStage(current, index);
     update(index); target = index; clearTimeout(targetTimer); targetTimer = setTimeout(() => { target = null; }, 3000);
-    main.scrollTo({top: index * main.clientHeight, behavior: instant ? 'instant' : 'smooth'});
+    scrollMain(index * main.clientHeight, instant);
   };
   function update(index) {
     current = index;
@@ -133,7 +145,7 @@ try {
   let ticking = false;
   main.addEventListener('scroll', () => { if (!ticking) requestAnimationFrame(() => { render(); ticking = false; }); ticking = true; }, {passive:true});
   // 창 크기가 바뀌면 페이지 높이가 달라지므로, 보던 페이지 위치로 다시 맞춘다(다른 페이지로 튀지 않게).
-  addEventListener('resize', () => { target = current; main.scrollTo({top: current * main.clientHeight, behavior: 'instant'}); render(); });
+  addEventListener('resize', () => { target = current; scrollMain(current * main.clientHeight, true); render(); });
   document.addEventListener('click',event => { const a=event.target.closest('a[href^="#"]'); if(!a)return; const index=pages.findIndex(p=>`#${p.id}`===a.hash); if(index<0)return; event.preventDefault(); go(index); });
   // 휠·트랙패드: 한 번 쓸 때마다 한 장씩 넘긴다(스크롤 없는 방식). 관성으로 이어지는 입력이 잦아들 때까지 다음 이동을 막는다.
   // 새 제스처 판정: 입력이 160ms 넘게 비었거나(관성 끝), 뚜렷하게 방향이 바뀌면 새로 쓴 것으로 본다.
@@ -160,7 +172,7 @@ try {
     go(current + Math.sign(wheelSum)); gestureUsed = true; lockedAt = now;
   }, {passive: false});
   document.addEventListener('keydown', event => { if(matchMedia('(max-width: 959px)').matches || event.target.closest('button,a,input,textarea,select')) return; const keys={ArrowDown:current+1,PageDown:current+1,ArrowUp:current-1,PageUp:current-1,Home:0,End:pages.length-1}; if(keys[event.key]!==undefined){event.preventDefault();go(keys[event.key]);} });
-  const initial = pages.findIndex(p=>`#${p.id}`===location.hash); if(initial>0) main.scrollTo({top: initial * main.clientHeight, behavior:'instant'});
+  const initial = pages.findIndex(p=>`#${p.id}`===location.hash); if(initial>0) scrollMain(initial * main.clientHeight, true);
   update(Math.max(initial,0)); render();
   window.addEventListener('hashchange',()=>{const index=pages.findIndex(p=>`#${p.id}`===location.hash);if(index>=0)go(index);});
 } catch(error) { console.error(error); const note=document.createElement('p'); note.className='load-error';note.textContent='콘텐츠를 불러오지 못했습니다. 페이지를 새로고침해주세요.';main.append(note); }
